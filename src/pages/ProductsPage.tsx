@@ -56,7 +56,7 @@ export const ProductsPage: React.FC = () => {
 
   const updatingQuantity = useCallback(
     async (id: number) => {
-      if (id) {
+      if (id >= 0) {
         if (!currentUser.isAdmin) {
           setSnackBarError("Only admin users can edit the price of a product");
           return;

@@ -3,6 +3,9 @@ import { AppContext, User } from "./AppContext";
 
 const adminUser: User = { id: "user1", name: "Admin user", isAdmin: true };
 
+console.log("adminUser", adminUser)
+
+
 const users: User[] = [
   adminUser,
   { id: "user2", name: "Non admin user", isAdmin: false },

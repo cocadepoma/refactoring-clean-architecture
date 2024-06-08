@@ -6,7 +6,7 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "npx eslint ./src --ext .ts,.tsx",
     "prettify": "prettier \"./**/*.{js,jsx,json,css,ts,tsx}\" --write",
     "preview": "vite preview",
     "test": "vitest run",
@@ -24,7 +24,6 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.0.3",
     "@eslint/js": "^9.4.0",
     "@testing-library/dom": "^10.1.0",
     "@testing-library/jest-dom": "^6.4.5",
@@ -32,13 +31,9 @@
     "@types/prettier": "^2.7.3",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
-    "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@typescript-eslint/parser": "^6.10.0",
     "@vitejs/plugin-react": "^4.2.0",
-    "eslint": "9.x",
+    "eslint": "8.x",
     "eslint-plugin-react": "^7.34.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
     "globals": "^15.4.0",
     "husky": "^9.0.11",
     "jsdom": "^24.1.0",
