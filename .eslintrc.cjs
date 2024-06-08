@@ -10,7 +10,8 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-        "@typescript-eslint/strict-boolean-expressions": "off",
+      "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
+      "@typescript-eslint/strict-boolean-expressions": "off",
       "indent": ["error", 2],
     },
     "ignorePatterns": ["src/**/*.test.ts", "src/frontend/generated/*"],
