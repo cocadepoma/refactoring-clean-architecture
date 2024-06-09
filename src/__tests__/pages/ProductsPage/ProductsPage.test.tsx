@@ -7,7 +7,7 @@ import { MockWebServer } from "../../../tests/MockWebServer";
 import { ProductsPage } from "../../../pages/ProductsPage";
 
 import { givenAProducts, givenThereAreNoProducts } from "./fixtures/fixtures";
-import { verifyHeader } from "./helpers/helpers";
+import { verifyHeader, verifyRows, waitToTableIsLoader } from "./helpers/helpers";
 
 const mockWebServer = new MockWebServer();
 
@@ -39,6 +39,18 @@ describe('tests on ProductsPage', () => {
 
     expect(rows).toHaveLength(1);
     verifyHeader(rows[0]);
+  });
+
+  it("should show a table with products", async () => {
+    const products = givenAProducts(mockWebServer);
+    renderComponent(<ProductsPage />);
+
+    await waitToTableIsLoader();
+
+    const [header, ...allRows] = screen.getAllByRole("row");
+
+    verifyHeader(header);
+    verifyRows(allRows, products);
   });
 });
 
