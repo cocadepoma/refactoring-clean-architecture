@@ -1,8 +1,9 @@
 import { test } from "vitest";
-import { render, screen } from "@testing-library/react";
 import { ReactNode } from "react";
-import { AppContext } from "../../context/AppContext";
+import { render, screen } from "@testing-library/react";
+
 import { ProductsPage } from "../../pages/ProductsPage";
+import { AppProvider } from "../../context/AppProvider";
 
 test("Loads and displays title", () => {
   renderComponent(<ProductsPage />);
@@ -12,12 +13,8 @@ test("Loads and displays title", () => {
 
 function renderComponent(children: ReactNode) {
   return render(
-    <AppContext.Provider value={{ 
-      currentUser: { id: "1", name: "John", isAdmin: true },
-      users: [],
-      setCurrentUser: () => {},
-    }}>
+    <AppProvider>
       {children}
-    </AppContext.Provider>
-  )
+    </AppProvider>
+  );
 }
