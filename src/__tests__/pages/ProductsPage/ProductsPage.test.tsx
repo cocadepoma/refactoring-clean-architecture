@@ -2,9 +2,9 @@ import { test, describe, beforeAll, afterEach, afterAll } from "vitest";
 import { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 
-import { ProductsPage } from "../../pages/ProductsPage";
-import { AppProvider } from "../../context/AppProvider";
-import { MockWebServer } from "../MockWebServer";
+import { AppProvider } from "../../../context/AppProvider";
+import { MockWebServer } from "../../../tests/MockWebServer";
+import { ProductsPage } from "../../../pages/ProductsPage";
 
 import productsResponse from './data/productsResponse.json';
 
