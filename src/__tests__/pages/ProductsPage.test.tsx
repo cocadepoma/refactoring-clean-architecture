@@ -1,14 +1,34 @@
-import { test } from "vitest";
+import { test, describe, beforeAll, afterEach, afterAll } from "vitest";
 import { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 
 import { ProductsPage } from "../../pages/ProductsPage";
 import { AppProvider } from "../../context/AppProvider";
+import { MockWebServer } from "../MockWebServer";
 
-test("Loads and displays title", () => {
-  renderComponent(<ProductsPage />);
+import productsResponse from './data/productsResponse.json';
 
-  screen.getByRole("heading", { name: "Product price updater" });
+const mockWebServer = new MockWebServer();
+
+describe('tests on ProductsPage', () => {
+  beforeAll(() => {
+    mockWebServer.start();
+  });
+
+  afterEach(() => {
+    mockWebServer.resetHandlers();
+  });
+
+  afterAll(() => {
+    mockWebServer.close();
+  });
+
+  test("Loads and displays title", () => {
+    givenAProducts();
+    renderComponent(<ProductsPage />);
+
+    screen.getByRole("heading", { name: "Product price updater" });
+  });
 });
 
 function renderComponent(children: ReactNode) {
@@ -17,4 +37,15 @@ function renderComponent(children: ReactNode) {
       {children}
     </AppProvider>
   );
+}
+
+function givenAProducts() {
+  mockWebServer.addRequestHandlers([
+    {
+      method: "get",
+      endpoint: "https://fakestoreapi.com/products",
+      httpStatusCode: 200,
+      response: productsResponse,
+    },
+  ]);
 }
