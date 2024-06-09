@@ -127,3 +127,11 @@ export async function changeToNonAdminUser(){
 
   await userEvent.click(screen.getByRole('menuitem', { name: /non admin user/i }));
 }
+
+export async function verifySaveButtonIsDisabled(dialog: HTMLElement,){
+  const dialogScope = within(dialog);
+
+  const button = dialogScope.getByRole('button', { name: /save/i }).closest('button');
+
+  expect(button).toBeDisabled();
+}

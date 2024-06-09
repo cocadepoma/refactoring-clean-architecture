@@ -7,7 +7,7 @@ import { MockWebServer } from "../../../tests/MockWebServer";
 import { ProductsPage } from "../../../pages/ProductsPage";
 
 import { givenAProducts, givenThereAreNoProducts } from "./fixtures/fixtures";
-import { changeToNonAdminUser, openDialogToEditPrice, savePrice, tryOpenDialogToEditPrice, typePrice, verifyDialog, verifyError, verifyHeader, verifyPriceAndStatus, verifyRows, waitToTableIsLoaded } from "./helpers/helpers";
+import { changeToNonAdminUser, openDialogToEditPrice, savePrice, tryOpenDialogToEditPrice, typePrice, verifyDialog, verifyError, verifyHeader, verifyPriceAndStatus, verifyRows, verifySaveButtonIsDisabled, waitToTableIsLoaded } from "./helpers/helpers";
 
 const mockWebServer = new MockWebServer();
 
@@ -78,6 +78,8 @@ describe('tests on ProductsPage', () => {
       await typePrice(dialog, "-4");
 
       verifyError(dialog, "Invalid price format");
+
+      await verifySaveButtonIsDisabled(dialog);
     });
 
     it('should show error for non number price', async () => {
@@ -91,6 +93,8 @@ describe('tests on ProductsPage', () => {
       await typePrice(dialog, "nonnumeric");
 
       verifyError(dialog, "Only numbers are allowed");
+
+      await verifySaveButtonIsDisabled(dialog);
     });   
     
     it('should show error for prices above the maximum', async () => {
@@ -104,6 +108,8 @@ describe('tests on ProductsPage', () => {
       await typePrice(dialog, "1000");
 
       verifyError(dialog, "The max possible price is 999.99");
+
+      await verifySaveButtonIsDisabled(dialog);
     });
     
     it('should edit price correctly and mark status as active for a price greather than 0', async () => {
