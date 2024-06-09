@@ -7,7 +7,7 @@ import { MockWebServer } from "../../../tests/MockWebServer";
 import { ProductsPage } from "../../../pages/ProductsPage";
 
 import { givenAProducts, givenThereAreNoProducts } from "./fixtures/fixtures";
-import { openDialogToEditPrice, savePrice, typePrice, verifyDialog, verifyError, verifyHeader, verifyPriceAndStatus, verifyRows, waitToTableIsLoaded } from "./helpers/helpers";
+import { changeToNonAdminUser, openDialogToEditPrice, savePrice, tryOpenDialogToEditPrice, typePrice, verifyDialog, verifyError, verifyHeader, verifyPriceAndStatus, verifyRows, waitToTableIsLoaded } from "./helpers/helpers";
 
 const mockWebServer = new MockWebServer();
 
@@ -138,7 +138,20 @@ describe('tests on ProductsPage', () => {
       await savePrice(dialog);
 
       await verifyPriceAndStatus(0, newPrice, "inactive");
-    });    
+    });
+    
+    it('should show a toast when a non admin user tries to edit a price', async () => {
+      givenAProducts(mockWebServer);
+      renderComponent(<ProductsPage />);
+  
+      await waitToTableIsLoaded();
+  
+      await changeToNonAdminUser();
+
+      await tryOpenDialogToEditPrice(0);    
+
+      await screen.findByText(/Only admin users can edit the price of a product/i);
+    });
   });
   
 });
