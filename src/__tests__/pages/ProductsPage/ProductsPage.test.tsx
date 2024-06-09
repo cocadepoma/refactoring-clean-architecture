@@ -7,7 +7,7 @@ import { MockWebServer } from "../../../tests/MockWebServer";
 import { ProductsPage } from "../../../pages/ProductsPage";
 
 import { givenAProducts, givenThereAreNoProducts } from "./fixtures/fixtures";
-import { openDialogToEditPrice, typePrice, verifyDialog, verifyError, verifyHeader, verifyRows, waitToTableIsLoaded } from "./helpers/helpers";
+import { openDialogToEditPrice, savePrice, typePrice, verifyDialog, verifyError, verifyHeader, verifyPriceAndStatus, verifyRows, waitToTableIsLoaded } from "./helpers/helpers";
 
 const mockWebServer = new MockWebServer();
 
@@ -104,7 +104,41 @@ describe('tests on ProductsPage', () => {
       await typePrice(dialog, "1000");
 
       verifyError(dialog, "The max possible price is 999.99");
-    });      
+    });
+    
+    it('should edit price correctly and mark status as active for a price greather than 0', async () => {
+      givenAProducts(mockWebServer);
+      renderComponent(<ProductsPage />);
+  
+      await waitToTableIsLoaded();
+  
+      const dialog = await openDialogToEditPrice(0);
+
+      const newPrice = "120.99";
+
+      await typePrice(dialog, newPrice);
+
+      await savePrice(dialog);
+
+      await verifyPriceAndStatus(0, newPrice, "active");
+    });
+
+    it('should edit price correctly and mark status as inactive for a price equal to 0', async () => {
+      givenAProducts(mockWebServer);
+      renderComponent(<ProductsPage />);
+  
+      await waitToTableIsLoaded();
+  
+      const dialog = await openDialogToEditPrice(0);
+
+      const newPrice = "0";
+
+      await typePrice(dialog, newPrice);
+
+      await savePrice(dialog);
+
+      await verifyPriceAndStatus(0, newPrice, "inactive");
+    });    
   });
   
 });

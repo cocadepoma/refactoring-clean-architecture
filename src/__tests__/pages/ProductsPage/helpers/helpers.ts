@@ -92,3 +92,28 @@ export function verifyError(dialog: HTMLElement, error: string) {
 
   dialogScope.getByText(error);
 }
+
+export async function savePrice(dialog: HTMLElement) {
+  const dialogScope = within(dialog);
+
+  const button = dialogScope.getByRole('button', { name: /save/i });
+
+  await userEvent.click(button);
+}
+
+export async function verifyPriceAndStatus(
+  index: number,
+  price: string,
+  status: string
+) {
+  const allRows = await screen.findAllByRole("row");
+
+  const [, ...rows] = allRows;
+  const row = rows[index];
+  const rowScope = within(row);
+
+  const cells = rowScope.getAllByRole("cell");
+
+  within(cells[3]).getByText(`$${(+price).toFixed(2)}`);
+  within(cells[4]).getByText(status);
+}
