@@ -77,3 +77,18 @@ export function verifyDialog(dialog: HTMLElement, product: RemoteProduct) {
   
   expect(textBox).toHaveValue(`${product.price}`);
 }
+
+export async function typePrice(dialog: HTMLElement, price: string) {
+  const dialogScope = within(dialog);
+
+  const textBox = dialogScope.getByRole('textbox', { name: /price/i });
+
+  await userEvent.clear(textBox);
+  await userEvent.type(textBox, price);
+}
+
+export function verifyError(dialog: HTMLElement, error: string) {
+  const dialogScope = within(dialog);
+
+  dialogScope.getByText(error);
+}
