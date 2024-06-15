@@ -2,9 +2,9 @@ import { it, describe, beforeAll, afterEach, afterAll, expect } from "vitest";
 import { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 
-import { AppProvider } from "../../../context/AppProvider";
+import { AppProvider } from "../../../presentation/context/AppProvider";
 import { MockWebServer } from "../../../tests/MockWebServer";
-import { ProductsPage } from "../../../pages/ProductsPage";
+import { ProductsPage } from "../../../presentation/pages/ProductsPage";
 
 import { givenAProducts, givenThereAreNoProducts } from "./fixtures/fixtures";
 import { changeToNonAdminUser, openDialogToEditPrice, savePrice, tryOpenDialogToEditPrice, typePrice, verifyDialog, verifyError, verifyHeader, verifyPriceAndStatus, verifyRows, verifySaveButtonIsDisabled, waitToTableIsLoaded } from "./helpers/helpers";

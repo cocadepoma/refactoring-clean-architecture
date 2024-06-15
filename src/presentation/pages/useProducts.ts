@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { RemoteProduct, StoreApi } from "../api/StoreApi";
+import { RemoteProduct, StoreApi } from "../../data/api/StoreApi";
 import { useReload } from "../hooks/useReload";
 
 export interface Product {
