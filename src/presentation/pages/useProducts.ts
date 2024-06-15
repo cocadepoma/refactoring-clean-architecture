@@ -2,13 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { useReload } from "../hooks/useReload";
 import { Product } from "../../domain/Product";
 import { GetProductUseCase } from "../../domain/GetProductsUseCase";
-import { StoreApi } from "../../data/api/StoreApi";
 import { useAppContext } from "../context/useAppContext";
-import { buildProduct } from "../../data/ProductApiRepository";
+import { GetProductByIdUseCase, ResourceNotFoundError } from "../../domain/GetProductByIdUseCase";
 
 export const useProducts = (
   getProductUseCase: GetProductUseCase,
-  storeApi: StoreApi
+  getProductById: GetProductByIdUseCase,
 ) => {
   const { currentUser } = useAppContext();
 
@@ -36,15 +35,16 @@ export const useProducts = (
           return;
         }
 
-        storeApi
-          .get(id)
-          .then(buildProduct)
-          .then((product) => {
-            setEditingProduct(product);
-          })
-          .catch(() => {
-            setError(`Product with id ${id} not found`);
-          });
+        try {
+          const product = await getProductById.execute(id);
+          setEditingProduct(product);
+        } catch (error) {
+          if(error instanceof ResourceNotFoundError) {
+            setError(error.message);
+          } else {
+            setError("An error occurred while trying to load the product. Please try again later.");
+          }
+        }
       }
     },
     [currentUser]

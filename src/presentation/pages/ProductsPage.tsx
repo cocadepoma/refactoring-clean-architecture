@@ -23,6 +23,7 @@ import { useProducts } from "./useProducts";
 import { Product } from "../../domain/Product";
 import { GetProductUseCase } from "../../domain/GetProductsUseCase";
 import { ProductApiRepository } from "../../data/ProductApiRepository";
+import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 
 const baseColumn: Partial<GridColDef<Product>> = {
   disableColumnMenu: true,
@@ -36,6 +37,11 @@ function createGetProductUseCase(): GetProductUseCase {
   return new GetProductUseCase(repository);
 }
 
+function createGetProductByIdUseCase(): GetProductByIdUseCase {
+  // const repository = new ProductApiRepository(storeApi);
+  return new GetProductByIdUseCase(storeApi);
+}
+
 export const ProductsPage: React.FC = () => {
   /**
    * @deprecated use error returned in useProduct instead of snackbarError
@@ -46,6 +52,7 @@ export const ProductsPage: React.FC = () => {
   const [priceError, setPriceError] = useState<string | undefined>(undefined);
 
   const getProductUseCase = useMemo(() => createGetProductUseCase(), []);
+  const getProductByIdUseCase = useMemo(() => createGetProductByIdUseCase(), []);
 
   const { 
     products,
@@ -55,7 +62,7 @@ export const ProductsPage: React.FC = () => {
     reload,
     updatingQuantity,
     cancelEditPrice,
-  } = useProducts(getProductUseCase, storeApi);
+  } = useProducts(getProductUseCase, getProductByIdUseCase);
 
   useEffect(() => {
     setSnackBarError(error);
