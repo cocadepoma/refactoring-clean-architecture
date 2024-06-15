@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { useReload } from "../hooks/useReload";
 import { Product } from "../../domain/Product";
-import { GetProductUseCase } from "../../domain/GetProductsUseCase";
+import { GetProductsUseCase } from "../../domain/GetProductsUseCase";
 import { useAppContext } from "../context/useAppContext";
 import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 import { ResourceNotFoundError } from "../../domain/ProductRepository";
 
 export const useProducts = (
-  getProductUseCase: GetProductUseCase,
+  getProductUseCase: GetProductsUseCase,
   getProductById: GetProductByIdUseCase,
 ) => {
   const { currentUser } = useAppContext();
@@ -38,6 +38,7 @@ export const useProducts = (
 
         try {
           const product = await getProductById.execute(id);
+
           setEditingProduct(product);
         } catch (error) {
           if(error instanceof ResourceNotFoundError) {

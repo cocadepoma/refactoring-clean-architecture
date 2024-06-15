@@ -1,7 +1,7 @@
 import { Product } from "./Product";
 import { ProductRepository } from "./ProductRepository";
 
-export class GetProductUseCase {
+export class GetProductsUseCase {
   constructor(private productRepository: ProductRepository) {}
 
   async execute(): Promise<Product[]> {

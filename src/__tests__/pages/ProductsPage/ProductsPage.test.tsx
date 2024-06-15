@@ -123,7 +123,7 @@ describe('tests on ProductsPage', () => {
       const newPrice = "120.99";
 
       await typePrice(dialog, newPrice);
-
+      
       await savePrice(dialog);
 
       await verifyPriceAndStatus(0, newPrice, "active");
