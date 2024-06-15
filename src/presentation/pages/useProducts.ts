@@ -3,7 +3,8 @@ import { useReload } from "../hooks/useReload";
 import { Product } from "../../domain/Product";
 import { GetProductUseCase } from "../../domain/GetProductsUseCase";
 import { useAppContext } from "../context/useAppContext";
-import { GetProductByIdUseCase, ResourceNotFoundError } from "../../domain/GetProductByIdUseCase";
+import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
+import { ResourceNotFoundError } from "../../domain/ProductRepository";
 
 export const useProducts = (
   getProductUseCase: GetProductUseCase,

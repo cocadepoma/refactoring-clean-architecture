@@ -38,8 +38,8 @@ function createGetProductUseCase(): GetProductUseCase {
 }
 
 function createGetProductByIdUseCase(): GetProductByIdUseCase {
-  // const repository = new ProductApiRepository(storeApi);
-  return new GetProductByIdUseCase(storeApi);
+  const repository = new ProductApiRepository(storeApi);
+  return new GetProductByIdUseCase(repository);
 }
 
 export const ProductsPage: React.FC = () => {
