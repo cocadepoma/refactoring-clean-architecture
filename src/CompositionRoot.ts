@@ -2,13 +2,14 @@ import { ProductApiRepository } from "./data/ProductApiRepository";
 import { StoreApi } from "./data/api/StoreApi";
 import { GetProductByIdUseCase } from "./domain/GetProductByIdUseCase";
 import { GetProductsUseCase } from "./domain/GetProductsUseCase";
+import { UpdateProductPriceUseCase } from "./domain/UpdateProductPriceUseCase";
 
 export class CompositionRoot {
   private constructor() {}
 
   private static instance: CompositionRoot;
   private storeApi = new StoreApi();  
-  private repository = new ProductApiRepository(this.storeApi);
+  private productRepository = new ProductApiRepository(this.storeApi);
 
   public static getInstance(): CompositionRoot {
     if (!CompositionRoot.instance) {
@@ -19,11 +20,15 @@ export class CompositionRoot {
   }
 
   provideGetProductsUseCase(): GetProductsUseCase {
-    return new GetProductsUseCase(this.repository);
+    return new GetProductsUseCase(this.productRepository);
   }
 
   provideGetProductByIdUseCase(): GetProductByIdUseCase {
-    return new GetProductByIdUseCase(this.repository);
+    return new GetProductByIdUseCase(this.productRepository);
+  }
+
+  provideUpdateProductPriceUseCase(): UpdateProductPriceUseCase {
+    return new UpdateProductPriceUseCase(this.productRepository);
   }
 
   provideStoreApi(): StoreApi {

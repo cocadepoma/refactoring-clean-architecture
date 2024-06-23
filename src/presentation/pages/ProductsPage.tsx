@@ -30,7 +30,7 @@ const baseColumn: Partial<GridColDef<ProductViewModel>> = {
 export const ProductsPage: React.FC = () => {
   const getProductsUseCase = useMemo(() => CompositionRoot.getInstance().provideGetProductsUseCase(), []);
   const getProductByIdUseCase = useMemo(() => CompositionRoot.getInstance().provideGetProductByIdUseCase(), []);
-  const storeApi = useMemo(() => CompositionRoot.getInstance().provideStoreApi(), []);
+  const updateProductPriceUseCase = useMemo(() => CompositionRoot.getInstance().provideUpdateProductPriceUseCase(), []);
 
   const { 
     products,
@@ -42,7 +42,7 @@ export const ProductsPage: React.FC = () => {
     onChangePrice,
     saveEditPrice,
     onCloseMessage,
-  } = useProducts(getProductsUseCase, getProductByIdUseCase, storeApi);
+  } = useProducts(getProductsUseCase, getProductByIdUseCase, updateProductPriceUseCase);
 
   function handleChangePrice(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

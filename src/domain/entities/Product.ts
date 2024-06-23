@@ -31,17 +31,26 @@ export class Product extends Entity {
 
   static create(data: ProductData): Product {
     try {
-      const price = Price.create(data.price);
-
-      return new Product({
-        id: data.id,
-        title: data.title,
-        image: data.image,
-        price: price,
-        status: +data.price === 0 ? "inactive" : "active",
-      });
+      return this.validateAndCreate(data);
     } catch (error) {
       throw new Error("An error occurred while trying to create a product");
     }
+  }
+
+  private static validateAndCreate(data: ProductData): Product {
+    const price = Price.create(data.price);
+
+    return new Product({
+      ...data,
+      price: price,
+      status: +data.price === 0 ? "inactive" : "active",
+    });
+  }
+
+  editPrice(price: string): Product {
+    return Product.validateAndCreate({
+      ...this,
+      price,
+    });
   }
 }
