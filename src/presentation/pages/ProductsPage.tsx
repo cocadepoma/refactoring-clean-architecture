@@ -18,8 +18,9 @@ import { MainAppBar } from "../components/MainAppBar";
 import styled from "@emotion/styled";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { ConfirmationDialog } from "../components/ConfirmationDialog";
-import { ProductStatus, ProductViewModel, useProducts } from "./useProducts";
+import { ProductViewModel, useProducts } from "./useProducts";
 import { CompositionRoot } from "../../CompositionRoot";
+import { ProductStatus } from "../../domain/entities/Product";
 
 const baseColumn: Partial<GridColDef<ProductViewModel>> = {
   disableColumnMenu: true,

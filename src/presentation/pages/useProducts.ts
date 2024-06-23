@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
+
 import { useReload } from "../hooks/useReload";
-import { Product } from "../../domain/Product";
-import { GetProductsUseCase } from "../../domain/GetProductsUseCase";
 import { useAppContext } from "../context/useAppContext";
+
+import { Product, ProductData, ProductStatus } from "../../domain/entities/Product";
+import { GetProductsUseCase } from "../../domain/GetProductsUseCase";
 import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 import { ResourceNotFoundError } from "../../domain/ProductRepository";
 import { Price, ValidationError } from "../../domain/value-objects/Price";
 
-export type ProductStatus = "active" | "inactive";
-
-export type ProductViewModel = Product & { status: ProductStatus };
+export type ProductViewModel = ProductData & { status: ProductStatus };
 
 export const useProducts = (
   getProductUseCase: GetProductsUseCase,
@@ -95,6 +95,6 @@ export const useProducts = (
 function buildProductViewModel(product: Product): ProductViewModel {
   return {
     ...product,
-    status: +product.price === 0 ? "inactive" : "active",
-  }
+    price: product.price.value.toFixed(2),
+  };
 }

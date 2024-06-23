@@ -1,5 +1,5 @@
-import { Product } from "../domain/Product";
 import { ProductRepository, ResourceNotFoundError } from "../domain/ProductRepository";
+import { Product } from "../domain/entities/Product";
 import { RemoteProduct, StoreApi } from "./api/StoreApi";
 
 export class ProductApiRepository implements ProductRepository { 
@@ -20,14 +20,11 @@ export class ProductApiRepository implements ProductRepository {
   }
 
   private buildProduct(remoteProduct: RemoteProduct): Product {
-    return {
+    return Product.create({
       id: remoteProduct.id,
       title: remoteProduct.title,
       image: remoteProduct.image,
-      price: remoteProduct.price.toLocaleString("en-US", {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 2,
-      }),
-    };
+      price: remoteProduct.price.toString(),
+    });
   }
 }
