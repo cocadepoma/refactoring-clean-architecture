@@ -3,22 +3,19 @@ import { useCallback, useEffect, useState } from "react";
 import { useReload } from "../hooks/useReload";
 import { useAppContext } from "../context/useAppContext";
 
-import { Product, ProductData, ProductStatus } from "../../domain/entities/Product";
+import { Product } from "../../domain/entities/Product";
 import { GetProductsUseCase } from "../../domain/GetProductsUseCase";
 import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 import { ResourceNotFoundError } from "../../domain/ProductRepository";
 import { Price, ValidationError } from "../../domain/value-objects/Price";
 import { ActionNotAllowedError, UpdateProductPriceUseCase } from "../../domain/UpdateProductPriceUseCase";
-
-export type ProductViewModel = ProductData & { status: ProductStatus };
-
-type message = { type: "error" | "success", text: string };
+import { ProductViewModel, UseProductState, message } from "./useProductsState";
 
 export const useProducts = (
   getProductUseCase: GetProductsUseCase,
   getProductById: GetProductByIdUseCase,
   updateProductPriceUseCase: UpdateProductPriceUseCase,
-) => {
+): UseProductState => {
   const { currentUser } = useAppContext();
 
   const [reloadKey, reload] = useReload();
@@ -69,7 +66,7 @@ export const useProducts = (
     [currentUser]
   );
 
-  function onChangePrice(price: string): void {
+  const onChangePrice = useCallback((price: string) => {
     if (!editingProduct) return;
 
     try {
@@ -83,9 +80,9 @@ export const useProducts = (
         setPriceError("Unexpected error occurred. Please try again later.");
       }
     }
-  }
+  }, [editingProduct]);
 
-  async function saveEditPrice(): Promise<void> {
+  const saveEditPrice = useCallback(async () => {
     if (editingProduct) {
       try {
         await updateProductPriceUseCase.execute(currentUser, editingProduct.id, editingProduct.price);
@@ -114,7 +111,7 @@ export const useProducts = (
         reload();
       }
     }
-  }
+  }, [currentUser, editingProduct, updateProductPriceUseCase, reload]);
 
   const onCloseMessage = useCallback(() => {
     setMessage(undefined);
