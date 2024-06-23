@@ -5,6 +5,7 @@ import { GetProductsUseCase } from "../../domain/GetProductsUseCase";
 import { useAppContext } from "../context/useAppContext";
 import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 import { ResourceNotFoundError } from "../../domain/ProductRepository";
+import { Price, ValidationError } from "../../domain/value-objects/Price";
 
 export const useProducts = (
   getProductUseCase: GetProductsUseCase,
@@ -56,18 +57,14 @@ export const useProducts = (
   function onChangePrice(price: string): void {
     if (!editingProduct) return;
 
-    const isValidNumber = !isNaN(+price);
-    setEditingProduct({ ...editingProduct, price: price });
-
-    if (!isValidNumber) {
-      setPriceError("Only numbers are allowed");
-    } else {
-      if (!priceRegex.test(price)) {
-        setPriceError("Invalid price format");
-      } else if (+price > 999.99) {
-        setPriceError("The max possible price is 999.99");
+    try {
+      setEditingProduct({ ...editingProduct, price: price });
+      Price.create(price);
+    } catch (error) {
+      if(error instanceof ValidationError) {
+        setPriceError(error.message);
       } else {
-        setPriceError(undefined);
+        setPriceError("Unexpected error occurred. Please try again later.");
       }
     }
   }
@@ -89,5 +86,3 @@ export const useProducts = (
     onChangePrice,
   };
 }
-
-const priceRegex = /^\d+(\.\d{1,2})?$/;
