@@ -7,6 +7,10 @@ import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 import { ResourceNotFoundError } from "../../domain/ProductRepository";
 import { Price, ValidationError } from "../../domain/value-objects/Price";
 
+export type ProductStatus = "active" | "inactive";
+
+export type ProductViewModel = Product & { status: ProductStatus };
+
 export const useProducts = (
   getProductUseCase: GetProductsUseCase,
   getProductById: GetProductByIdUseCase,
@@ -14,8 +18,8 @@ export const useProducts = (
   const { currentUser } = useAppContext();
 
   const [reloadKey, reload] = useReload();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [editingProduct, setEditingProduct] = useState<Product | undefined>(
+  const [products, setProducts] = useState<ProductViewModel[]>([]);
+  const [editingProduct, setEditingProduct] = useState<ProductViewModel | undefined>(
     undefined
   );
   const [error, setError] = useState<string>();
@@ -23,10 +27,10 @@ export const useProducts = (
 
   useEffect(() => {
     getProductUseCase.execute().then((products) => {
-      console.log("Reloading", reloadKey)
-      setProducts(products);
+      console.log("Reloading", reloadKey);
+      setProducts(products.map(buildProductViewModel));
     });
-  }, [reloadKey]);
+  }, [reloadKey, getProductUseCase]);
 
   // TODO: Load product
   // TODO: User validation
@@ -41,7 +45,7 @@ export const useProducts = (
         try {
           const product = await getProductById.execute(id);
 
-          setEditingProduct(product);
+          setEditingProduct(buildProductViewModel(product));
         } catch (error) {
           if(error instanceof ResourceNotFoundError) {
             setError(error.message);
@@ -60,6 +64,7 @@ export const useProducts = (
     try {
       setEditingProduct({ ...editingProduct, price: price });
       Price.create(price);
+      setPriceError(undefined);
     } catch (error) {
       if(error instanceof ValidationError) {
         setPriceError(error.message);
@@ -85,4 +90,11 @@ export const useProducts = (
     cancelEditPrice,
     onChangePrice,
   };
+}
+
+function buildProductViewModel(product: Product): ProductViewModel {
+  return {
+    ...product,
+    status: +product.price === 0 ? "inactive" : "active",
+  }
 }
